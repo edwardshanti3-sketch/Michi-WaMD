@@ -5,7 +5,7 @@ let handler = async (m, { conn, text }) => {
 
   try {
     const config = {
-      panelUrl: "https://tupanel.com",
+      panelUrl: "https://panel.twb.qzz.io",
       apiKey: "TU_ADMIN_API_KEY"
     }
 
