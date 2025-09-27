@@ -85,21 +85,21 @@ export async function handler(chatUpdate) {
         economy: true,
         gacha: true
     });
- 
+
     if (chat.isBanned) {
-    
-    const textLower = m.text?.toLowerCase() || ''
-    if (
-        !textLower.startsWith('.unbanchat') &&
-        !textLower.startsWith('/unbanchat') &&
-        !textLower.startsWith('!unbanchat') &&
-        !textLower.startsWith('.desbanearbot') &&
-        !textLower.startsWith('/desbanearbot') &&
-        !textLower.startsWith('!desbanearbot')
-    ) {
-        return
+        const textLower = m.text?.toLowerCase() || '';
+        if (
+            !textLower.startsWith('.unbanchat') &&
+            !textLower.startsWith('/unbanchat') &&
+            !textLower.startsWith('!unbanchat') &&
+            !textLower.startsWith('.desbanearbot') &&
+            !textLower.startsWith('/desbanearbot') &&
+            !textLower.startsWith('!desbanearbot')
+        ) {
+            return;
+        }
     }
- }
+
     const settings = global.db.data.settings[this.user.jid] || (global.db.data.settings[this.user.jid] = {
         self: false,
         restrict: true,
@@ -107,7 +107,7 @@ export async function handler(chatUpdate) {
         antiPrivate: false,
         gponly: false
     });
- 
+
     if (typeof m.text !== "string") m.text = "";
 
     const nuevoNombre = m.pushName || await this.getName(m.sender);
@@ -156,11 +156,11 @@ export async function handler(chatUpdate) {
     const botJid = this.user.jid;
     const groupMetadata = m.isGroup ? ((this.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(() => null)) : {};
     const participants = m.isGroup ? (groupMetadata.participants || []) : [];
-    const user = participants.find(p => p.id === senderLid || p.jid === senderJid) || {};
-    const bot = participants.find(p => p.id === botLid || p.jid === botJid) || {};
-    const isRAdmin = user?.admin === "superadmin";
-    const isAdmin = isRAdmin || user?.admin === "admin";
-    const isBotAdmin = !!bot?.admin;
+    const userGroup = participants.find(p => p.id === senderLid || p.jid === senderJid) || {};
+    const botGroup = participants.find(p => p.id === botLid || p.jid === botJid) || {};
+    const isRAdmin = userGroup?.admin === "superadmin";
+    const isAdmin = isRAdmin || userGroup?.admin === "admin";
+    const isBotAdmin = !!botGroup?.admin;
 
     const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "./plugins");
     for (const name in global.plugins) {
@@ -188,8 +188,8 @@ export async function handler(chatUpdate) {
                 conn: this,
                 participants,
                 groupMetadata,
-                user,
-                bot,
+                user: userGroup,
+                bot: botGroup,
                 isROwner,
                 isOwner,
                 isMods,
@@ -200,7 +200,6 @@ export async function handler(chatUpdate) {
                 chatUpdate,
                 __dirname,
                 __filename: join(___dirname, name),
-                user,
                 chat,
                 settings
             })) continue;
@@ -293,8 +292,8 @@ export async function handler(chatUpdate) {
                 conn: this,
                 participants,
                 groupMetadata,
-                user,
-                bot,
+                user: userGroup,
+                bot: botGroup,
                 isROwner,
                 isOwner,
                 isMods,
@@ -305,7 +304,6 @@ export async function handler(chatUpdate) {
                 chatUpdate,
                 __dirname,
                 __filename: join(___dirname, name),
-                user,
                 chat,
                 settings
             });
@@ -321,8 +319,8 @@ export async function handler(chatUpdate) {
                     conn: this,
                     participants,
                     groupMetadata,
-                    user,
-                    bot,
+                    user: userGroup,
+                    bot: botGroup,
                     isROwner,
                     isOwner,
                     isMods,
@@ -333,7 +331,6 @@ export async function handler(chatUpdate) {
                     chatUpdate,
                     __dirname,
                     __filename: join(___dirname, name),
-                    user,
                     chat,
                     settings
                 });
