@@ -5,13 +5,13 @@ let handler = async (m, { conn, text }) => {
 
   try {
     const config = {
-      panelUrl: "https://panel.twb.qzz.io",
-      apiKey: "TU_ADMIN_API_KEY"
+      panelUrl: "https://tupanel.com",
+      apiKey: "ptla_aF4X0MRAzM9oAg7E7Ga1zqtWMWFB2qnpuO6uqltVsQI"
     }
 
     const userId = 1
-    const eggId = 5
-    const dockerImage = "node:18-alpine"
+    const eggId = 5 // Egg de Node.js en tu Pterodactyl (cambia si es otro ID)
+    const dockerImage = "ghcr.io/parkervcp/yolks:nodejs_21" // Imagen oficial del egg Node.js
     const startup = "npm start"
     const allocationId = 10
 
@@ -55,7 +55,7 @@ let handler = async (m, { conn, text }) => {
       }
     })
 
-    await m.reply(`✅ Servidor creado correctamente\n📦 Nombre: *${text}*\n💾 RAM: ${limits.memory} MB\n📂 Disco: ${limits.disk} MB\n⚡ CPU: ${limits.cpu === 0 ? "Ilimitado" : limits.cpu + "%"}`)
+    await m.reply(`✅ Servidor Node.js creado correctamente\n📦 Nombre: *${text}*\n💾 RAM: ${limits.memory} MB\n📂 Disco: ${limits.disk} MB\n⚡ CPU: ${limits.cpu === 0 ? "Ilimitado" : limits.cpu + "%"}`)
   } catch (e) {
     console.error(e.response?.data || e.message)
     throw `❌ Error creando el server\n${e.response?.data?.errors?.[0]?.detail || e.message}`
