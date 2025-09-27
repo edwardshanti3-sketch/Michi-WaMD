@@ -263,6 +263,16 @@ export async function handler(chatUpdate) {
             global.dfail("group", m, this);
             continue;
         }
+        
+        // ===================================
+        // ===== BLOQUE CORREGIDO AÑADIDO ====
+        // ===================================
+        if (plugin.admin && !isAdmin) {
+            global.dfail("admin", m, this);
+            continue;
+        }
+        // ===================================
+        
         if (plugin.botAdmin && !isBotAdmin) {
             global.dfail("botAdmin", m, this);
             continue;
