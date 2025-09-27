@@ -144,13 +144,23 @@ export async function handler(chatUpdate) {
 
     m.exp += Math.ceil(Math.random() * 10);
 
-    const groupMetadata = m.isGroup ? await this.groupMetadata(m.chat).catch(() => ({})) : {};
-    const participants = m.isGroup ? groupMetadata.participants?.map(p => ({ id: p.jid, jid: p.jid, lid: p.lid, admin: p.admin })) || [] : [];
-    const userGroup = participants.find(u => conn.decodeJid(u.jid) === m.sender) || {};
-    const botGroup = participants.find(u => conn.decodeJid(u.jid) === this.user.jid) || {};
-    const isRAdmin = userGroup?.admin === "superadmin";
-    const isAdmin = isRAdmin || userGroup?.admin === "admin";
-    const isBotAdmin = botGroup?.admin;
+    async function getLidFromJid(id, conn) {
+        if (id.endsWith('@lid')) return id;
+        const res = await conn.onWhatsApp(id).catch(() => []);
+        return res[0]?.lid || id;
+    }
+
+    const senderLid = await getLidFromJid(m.sender, this);
+    const botLid = await getLidFromJid(this.user.jid, this);
+    const senderJid = m.sender;
+    const botJid = this.user.jid;
+    const groupMetadata = m.isGroup ? ((this.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(() => null)) : {};
+    const participants = m.isGroup ? (groupMetadata.participants || []) : [];
+    const user = participants.find(p => p.id === senderLid || p.jid === senderJid) || {};
+    const bot = participants.find(p => p.id === botLid || p.jid === botJid) || {};
+    const isRAdmin = user?.admin === "superadmin";
+    const isAdmin = isRAdmin || user?.admin === "admin";
+    const isBotAdmin = !!bot?.admin;
 
     const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "./plugins");
     for (const name in global.plugins) {
@@ -161,7 +171,7 @@ export async function handler(chatUpdate) {
         const match = (pluginPrefix instanceof RegExp
             ? [[pluginPrefix.exec(m.text), pluginPrefix]]
             : Array.isArray(pluginPrefix)
-            ? pluginPrefix.map(p => [p instanceof RegExp ? p : new RegExp(p.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).exec(m.text), p])
+            ? pluginPrefix.map(p => [p instanceof RegExp ? p : new RegExp(p.replace(/[.*+?^${}()|\[\]\\]/g, '\\$1')).exec(m.text), p])
             : typeof pluginPrefix === "string"
             ? [[new RegExp(pluginPrefix.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).exec(m.text), new RegExp(pluginPrefix)]]
             : [[[], new RegExp]]).find(p => p[1]);
@@ -178,8 +188,8 @@ export async function handler(chatUpdate) {
                 conn: this,
                 participants,
                 groupMetadata,
-                userGroup,
-                botGroup,
+                user,
+                bot,
                 isROwner,
                 isOwner,
                 isMods,
@@ -283,8 +293,8 @@ export async function handler(chatUpdate) {
                 conn: this,
                 participants,
                 groupMetadata,
-                userGroup,
-                botGroup,
+                user,
+                bot,
                 isROwner,
                 isOwner,
                 isMods,
@@ -311,8 +321,8 @@ export async function handler(chatUpdate) {
                     conn: this,
                     participants,
                     groupMetadata,
-                    userGroup,
-                    botGroup,
+                    user,
+                    bot,
                     isROwner,
                     isOwner,
                     isMods,
