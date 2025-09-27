@@ -25,7 +25,7 @@ export async function handler(chatUpdate) {
     if (!m) return;
 
     let prefixRegex = global.prefix;
-    let usedPrefix = global.prefix || ""; // Valor predeterminado para usedPrefix
+    let usedPrefix = global.prefix || "";
     const senderNumber = this.user.jid.split('@')[0];
     if (!prefixCache.has(senderNumber)) {
         const botPath = path.join('./Sessions/SubBot', senderNumber);
@@ -150,17 +150,20 @@ export async function handler(chatUpdate) {
         return res[0]?.lid || id;
     }
 
+    const groupMetadata = m.isGroup ? (await this.groupMetadata(m.chat).catch(() => ({ participants: [] }))) : {};
+    const participants = m.isGroup ? (groupMetadata.participants || []) : [];
+
     const senderLid = await getLidFromJid(m.sender, this);
     const botLid = await getLidFromJid(this.user.jid, this);
     const senderJid = m.sender;
     const botJid = this.user.jid;
-    const groupMetadata = m.isGroup ? ((this.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(() => null)) : {};
-    const participants = m.isGroup ? (groupMetadata.participants || []) : [];
-    const userGroup = participants.find(p => p.id === senderLid || p.jid === senderJid) || {};
-    const botGroup = participants.find(p => p.id === botLid || p.jid === botJid) || {};
-    const isRAdmin = userGroup?.admin === "superadmin";
-    const isAdmin = isRAdmin || userGroup?.admin === "admin";
-    const isBotAdmin = !!botGroup?.admin;
+
+    const userGroup = participants.find(p => p.id === senderLid || p.id === senderJid) || {};
+    const botGroup = participants.find(p => p.id === botLid || p.id === botJid) || {};
+
+    const isRAdmin = userGroup.admin === "superadmin";
+    const isAdmin = isRAdmin || userGroup.admin === "admin";
+    const isBotAdmin = botGroup.admin === "admin" || botGroup.admin === "superadmin";
 
     const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "./plugins");
     for (const name in global.plugins) {
@@ -205,7 +208,7 @@ export async function handler(chatUpdate) {
             })) continue;
         }
 
-        usedPrefix = (match[0] || "")[0]; // Asignación de usedPrefix dentro del bucle
+        usedPrefix = (match[0] || "")[0];
         if (!usedPrefix) continue;
 
         const noPrefix = m.text.replace(usedPrefix, "");
