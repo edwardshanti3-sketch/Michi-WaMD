@@ -229,7 +229,7 @@ export async function handler(chatUpdate) {
 
         if (chat.isBanned && !isMods && name !== "group-banchat.js") {
             if (!chat.primaryBot || chat.primaryBot === this.user.jid) {
-                await this.reply(m.chat, `ꕥ El bot *${settings.botname}* está desactivado en este grupo\n\n> ✦ Un *administrador* puede activarlo con el comando:\n> » *${usedPrefix}bot on*`, m);
+                // await this.reply(m.chat, `ꕥ El bot *${settings.botname}* está desactivado en este grupo\n\n> ✦ Un *administrador* puede activarlo con el comando:\n> » *${usedPrefix}bot on*`, m);
                 return;
             }
         }
