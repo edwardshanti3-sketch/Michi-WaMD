@@ -125,7 +125,7 @@ const handler = async (m, { conn, command }) => {
   const caption = who !== m.sender ? `*${fromName}* ${captionText} *${toName} ${getRandomSymbol()}*.` : `*${fromName}* ${captionText} *${getRandomSymbol()}*`;
 
   try {
-    const response = await fetch(`${api.url}/sfw/interaction?type=${actualCommand}&apikey=${api.key}`);
+    const response = await fetch(`https://api.stellarwa.xyz/sfw/interaction?type=${actualCommand}&apikey=Adonix`);
     const json = await response.json();
     const { result } = json;
 
