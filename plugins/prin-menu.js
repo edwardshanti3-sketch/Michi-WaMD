@@ -35,23 +35,23 @@ let handler = async (m, { conn, usedPrefix }) => {
       } catch (e) { console.error(e) }
     }
 
-    let txt = `> .・。.・゜〄・.・〄・゜・。.\n`
-    txt += `✐ *Hola! Soy ${botNameToShow}*
-${(conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Sub Bot 🅑')}\n`
-    txt += `> ⊹ *Hora* » ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}\n`
-    txt += `> ⊹ *Fecha* » ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}\n\n`
+    let txt = `𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}* ${(conn.user.jid == global.conn.user.jid ? '(𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥)' : '(𝐒𝐮𝐛-𝐁𝐨𝐭 🅑)')}
+
+⊹ *Hora:* ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
+⊹ *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
+⊹ *Actividad:* ${uptimeStr}
+
+Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
 
     for (let tag in menu) {
-      txt += `➭ *✿》${tag.toUpperCase()}《✿*\n`
+      txt += `*»  ⊹ ˚୨ ${tag.toUpperCase()} ୧˚⊹*\n`
       for (let plugin of menu[tag]) {
         for (let cmd of plugin.help) {
-          txt += `> ⟩ *${usedPrefix}${cmd}*\n`
+          txt += `❏ ${usedPrefix + cmd}\n`
         }
       }
       txt += `\n`
     }
-
-    txt += `> : *Actividad* » ${uptimeStr}`
 
     if (videoUrl) {
       await conn.sendMessage(
