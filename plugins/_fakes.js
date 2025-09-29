@@ -30,14 +30,16 @@ handler.all = async function (m) {
   global.packsticker = `〄 𝗦𝗧𝗜𝗖𝗞𝗘𝗥𝗦\n✩ᩚ Usuario » ${nombre}\n✦ Bot » ${botname}`
   global.packsticker2 = `\n\n${dev}`
   
+  
   global.rcanal = { 
-    key: { participants:"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, 
-    "message": { 
-      "contactMessage": { 
-        "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` 
-      }
-    }, 
-    "participant": "0@s.whatsapp.net" 
+    key: { 
+      fromMe: false,
+      participant: "0@s.whatsapp.net",
+      remoteJid: "status@broadcast",
+      id: "Halo",
+      forwardingScore: 999,
+      isForwarded: true
+    }
   }
 }
 
