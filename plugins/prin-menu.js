@@ -47,7 +47,7 @@ Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
       txt += `*»  ⊹ ˚୨ ${tag.toUpperCase()} ୧˚⊹*\n`
       for (let plugin of menu[tag]) {
         for (let cmd of plugin.help) {
-          txt += `❏ ${usedPrefix + cmd}\n`
+          txt += `> ❏ ${usedPrefix + cmd}\n`
         }
       }
       txt += `\n`
