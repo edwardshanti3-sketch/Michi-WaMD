@@ -11,25 +11,15 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         let results = search.all[0]
         let url = results.url
 
-        // Mensaje con miniatura en externalAdReply
+        
         let txt = `「✦」Descargando ${results.title}
 
-✐ Canal » ${results.author?.name || '-'} ⴵ Duración » ${results.timestamp || '-'} ✰ Link » ${results.url}`
+✐ Canal » ${results.author?.name || '-'}
+ⴵ Duración » ${results.timestamp || '-'}
+ꕤ Vistas » ${results.views || '-'}
+✰ Link » ${results.url}`
 
-        await conn.sendMessage(m.chat, {
-            text: txt,
-            contextInfo: {
-                externalAdReply: {
-                    showAdAttribution: true,
-                    title: results.title,
-                    body: results.author?.name || '-',
-                    mediaType: 2,
-                    thumbnail: await (await fetch(results.image)).buffer(),
-                    mediaUrl: results.url,
-                    sourceUrl: results.url
-                }
-            }
-        }, { quoted: m })
+        await conn.sendMessage(m.chat, { text: txt }, { quoted: m })
 
         if (command === 'play' || command === 'ytmp3') {
             let api2 = await (await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${url}`)).json()
@@ -50,7 +40,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
                 video: { url: api2.data.url },
                 mimetype: 'video/mp4',
                 fileName: `${results.title || 'video'}.mp4`,
-                caption: '> ❑ Aquí tienes'
+                caption: ''
             }, { quoted: m })
         }
 
