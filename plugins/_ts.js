@@ -2,24 +2,13 @@ import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn }) => {
     try {
-        // Mensaje con link directo al grupo
         const message = {
-            templateMessage: {
-                hydratedTemplate: {
-                    hydratedContentText: '¡Únete a nuestro grupo wey! 🎉',
-                    locationMessage: { 
-                        jpegThumbnail: null 
-                    },
-                    hydratedFooterText: 'Shadow Group',
-                    hydratedButtons: [
-                        {
-                            urlButton: {
-                                displayText: 'Unirme al grupo',
-                                url: 'https://chat.whatsapp.com/DJcUWCf08sDGFcMKiap0mr?mode=ems_copy_t'
-                            }
-                        }
-                    ]
-                }
+            groupInviteMessage: {
+                inviteCode: 'DJcUWCf08sDGFcMKiap0mr',
+                groupJid: '120363403646972443@g.us',
+                inviteExpiration: 0,
+                groupName: 'Shadow Group',
+                jpegThumbnail: null
             }
         }
 
