@@ -1,11 +1,9 @@
-import fs from "fs"
-import path from "path"
 import ws from "ws"
 
-const handler = async (m, { conn, usedPrefix, participants }) => {
+const handler = async (m, { conn, command, usedPrefix, participants }) => {
   try {
     const users = [
-      global.conn.user.jid, 
+      global.conn.user.jid,
       ...new Set(
         global.conns
           .filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED)
@@ -17,12 +15,12 @@ const handler = async (m, { conn, usedPrefix, participants }) => {
       const segundos = Math.floor(ms / 1000)
       const minutos = Math.floor(segundos / 60)
       const horas = Math.floor(minutos / 60)
-      const dias = Math.floor(horas / 24)
+      const días = Math.floor(horas / 24)
       const segRest = segundos % 60
       const minRest = minutos % 60
       const horasRest = horas % 24
       let resultado = ""
-      if (dias) resultado += `${dias} días, `
+      if (días) resultado += `${días} días, `
       if (horasRest) resultado += `${horasRest} horas, `
       if (minRest) resultado += `${minRest} minutos, `
       if (segRest) resultado += `${segRest} segundos`
@@ -34,44 +32,34 @@ const handler = async (m, { conn, usedPrefix, participants }) => {
       groupBots.push(global.conn.user.jid)
     }
 
-    let customSubs = 0
-    const botsGroup = groupBots.map((bot) => {
-      const isMainBot = bot === global.conn.user.jid
-      const v = global.conns.find((conn) => conn.user.jid === bot)
-      const uptime = isMainBot ? convertirMsADiasHorasMinutosSegundos(Date.now() - global.conn.uptime) : v?.uptime ? convertirMsADiasHorasMinutosSegundos(Date.now() - v.uptime) : "Activo desde ahora"
-      const mention = bot.replace(/[^0-9]/g, '')
+    const botsGroup = groupBots.length > 0
+      ? groupBots.map((bot) => {
+          const isMainBot = bot === global.conn.user.jid
+          const v = global.conns.find((conn) => conn.user.jid === bot)
+          const uptime = isMainBot
+            ? convertirMsADiasHorasMinutosSegundos(Date.now() - global.conn.uptime)
+            : v?.uptime
+            ? convertirMsADiasHorasMinutosSegundos(Date.now() - v.uptime)
+            : "Activo desde ahora"
+          const mention = bot.replace(/[^0-9]/g, '')
+          return `🜸 [${isMainBot ? "Principal" : "Sub-Bot"}] » @${mention}\n   ⌬ Online: ${uptime}`
+        }).join("\n\n")
+      : `✧ No hay bots activos en este grupo`
 
-      const botPath = path.join('./Sessions/SubBot', mention)
-      const configPath = path.join(botPath, 'config.json')
-      let isCustom = false
-      if (fs.existsSync(configPath)) {
-        isCustom = true
-        if (!isMainBot) customSubs += 1
-      }
-
-      return `@${mention}\n> » Bot: ${isMainBot ? 'Principal' : 'Sub-Bot'}${isCustom && !isMainBot ? ' (Personalizado)' : ''}\n> » Online: ${uptime}`
-    }).join("\n\n")
-
-    const message = `*✦ Lista de bots activos*
-
-✎ Principal: *1*
-⌗ Subs totales: *${users.length - 1}*
-⌗ Subs personalizados: *${customSubs}*
-
-❐ En este grupo: *${groupBots.length}* bots
-${botsGroup}`
+    const message = `ꕥ Lista de bots activos (*${users.length}* sesiones)\n\n` +
+      `✿ Principales » *1* sesiones\n` +
+      `ꕤ Subs » *${users.length - 1}* sesiones\n\n` +
+      `❏ En este grupo: *${groupBots.length}*\n\n${botsGroup}`
 
     const mentionList = groupBots.map(bot => bot.endsWith("@s.whatsapp.net") ? bot : `${bot}@s.whatsapp.net`)
-    rcanal.contextInfo.mentionedJid = mentionList
-    await conn.sendMessage(m.chat, { text: message, ...rcanal }, { quoted: m })
-
+    await conn.sendMessage(m.chat, { text: message, mentions: mentionList }, { quoted: m })
   } catch (error) {
     m.reply(`⚠︎ Se ha producido un problema.\n> Usa *${usedPrefix}report* para informarlo.\n\n${error.message}`)
   }
 }
 
 handler.tags = ["serbot"]
-handler.help = ["botlist"]
+handler.help = ["bots"]
 handler.command = ["botlist", "listbots", "listbot", "bots", "sockets", "socket"]
 
 export default handler
