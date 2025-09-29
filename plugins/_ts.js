@@ -1,14 +1,27 @@
+import { generateWAMessageFromContent, proto } from '@whiskeysockets/baileys'
+
 let handler = async (m, { conn }) => {
     try {
+        // Mensaje tipo "Group Invite" con botón oficial
         const message = {
-            text: 'Test? 🎉',
-            footer: 'Sxjx',
-            templateButtons: [
-                { urlButton: { displayText: 'Ir al grupo', url: 'https://chat.whatsapp.com/DJcUWCf08sDGFcMKiap0mr?mode=ems_copy_t' } }
-            ]
+            groupInviteMessage: {
+                inviteCode: 'DJcUWCf08sDGFcMKiap0mr', // código de tu enlace
+                groupJid: '120363403646972443@g.us', // JID del grupo
+                inviteExpiration: 0, // 0 = sin expiración
+                groupName: 'Shadow Group', // nombre que se mostrará en el botón
+                caption: '¡Únete a nuestro grupo wey! 🎉',
+                jpegThumbnail: null 
+            }
         }
 
-        await conn.sendMessage(m.chat, message, { quoted: m })
+        const msg = generateWAMessageFromContent(
+            m.chat,
+            proto.Message.fromObject(message),
+            { quoted: m }
+        )
+
+        await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+
     } catch (e) {
         m.reply(`Error: ${e.message}`)
         m.react('✖️')
@@ -16,5 +29,7 @@ let handler = async (m, { conn }) => {
 }
 
 handler.command = ['invitelink', 'grupo', 'linkgrupo']
+handler.help = ['invitelink']
+handler.tags = ['general']
 
 export default handler
