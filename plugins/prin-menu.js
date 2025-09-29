@@ -41,6 +41,8 @@ let handler = async (m, { conn, usedPrefix }) => {
 ⊹ *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
 ⊹ *Actividad:* ${uptimeStr}
 
+✿ 𝗖𝗮𝗻𝗮𝗹: https://whatsapp.com/channel/0029VbArz9fAO7RGy2915k3O
+
 Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
 
     for (let tag in menu) {
