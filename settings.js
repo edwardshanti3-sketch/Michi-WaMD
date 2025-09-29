@@ -27,6 +27,7 @@ global.nameqr = "Michi"
 global.sessions = "Sessions/Principal"
 global.jadi = "Sessions/SubBot"
 global.MichiJadibts = true
+global.enableRcanal = true
 
 global.botname = "𝖬𝗂𝖼𝗁𝗂 - 𝖡𝗈𝗍𝖶𝖺"
 global.textbot = "ᴍɪᴄʜɪ ᴠ3, 𝗔𝗱𝗼"
