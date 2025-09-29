@@ -5,21 +5,19 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     if (!text) return m.reply(`» Ingresa un texto o link de YouTube\n> Ejemplo: ${usedPrefix + command} ozuna`)
 
     try {
-        let search = await yts(text)
-        if (!search?.all || search.all.length === 0) return m.reply('No se encontraron resultados.')
+        let url = text.match(/(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/\S+/gi)?.[0]
+        let results
 
-        let results = search.all[0]
-        let url = results.url
-
+        if (!url) {
+            
+            let search = await yts(text)
+            if (!search?.all || search.all.length === 0) return m.reply('No se encontraron resultados.')
+            results = search.all[0]
+            url = results.url
+        } else {
         
-        let txt = `「✦」Descargando ${results.title}
-
-✐ Canal » ${results.author?.name || '-'}
-ⴵ Duración » ${results.timestamp || '-'}
-ꕤ Vistas » ${results.views || '-'}
-✰ Link » ${results.url}`
-
-        await conn.sendMessage(m.chat, { text: txt }, { quoted: m })
+            results = { title: 'Audio/Video', url }
+        }
 
         if (command === 'play' || command === 'ytmp3') {
             let api2 = await (await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${url}`)).json()
@@ -39,8 +37,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             await conn.sendMessage(m.chat, {
                 video: { url: api2.data.url },
                 mimetype: 'video/mp4',
-                fileName: `${results.title || 'video'}.mp4`,
-                caption: ''
+                fileName: `${results.title || 'video'}.mp4`
             }, { quoted: m })
         }
 
