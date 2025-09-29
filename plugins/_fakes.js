@@ -30,7 +30,7 @@ handler.all = async function (m) {
   global.packsticker = `〄 𝗦𝗧𝗜𝗖𝗞𝗘𝗥𝗦\n✩ᩚ Usuario » ${nombre}\n✦ Bot » ${botname}`
   global.packsticker2 = `\n\n${dev}`
   
-  global.fkontak = { 
+  global.rcanal = { 
     key: { participants:"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, 
     "message": { 
       "contactMessage": { 
