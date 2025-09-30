@@ -11,7 +11,7 @@ global.owner = [
 ["17703905533965@lid"],
 [""],  
 // ZONA DE LIDS 
-["", "", true],
+["17703905533965", "GianPoolS", true],
 ["", "", true], 
 ["", "", true]
 ]
