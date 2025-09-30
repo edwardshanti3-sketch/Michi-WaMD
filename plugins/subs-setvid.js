@@ -19,13 +19,19 @@ async function uploadToCatbox(content, filename) {
 }
 
 const handler = async (m, { conn, command }) => {
-  const senderNumber = m.sender.replace(/[^0-9]/g, "")
-  const botPath = path.join("./Sessions/SubBot", senderNumber)
-  const configPath = path.join(botPath, "config.json")
-
-  if (!fs.existsSync(botPath)) return m.reply("> ꕤ Este comando es solo para *sockets*.")
-
   try {
+    const senderNumber = m.sender.replace(/[^0-9]/g, "")
+    let configPath
+
+    // si es subbot
+    const botPath = path.join("./Sessions/SubBot", senderNumber)
+    if (fs.existsSync(botPath)) {
+      configPath = path.join(botPath, "config.json")
+    } else {
+      // si es bot principal
+      configPath = path.join("./Sessions", "config.json")
+    }
+
     const q = m.quoted || m
     const mime = (q.msg || q).mimetype || q.mediaType || ""
 
@@ -67,4 +73,4 @@ const handler = async (m, { conn, command }) => {
 handler.command = ["setvid","setvideo"]
 handler.help = ["setvid"]
 handler.tags = ["serbot"]
-export default handler 
+export default handler
