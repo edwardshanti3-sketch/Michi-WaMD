@@ -35,24 +35,29 @@ let handler = async (m, { conn, usedPrefix }) => {
       } catch (e) { console.error(e) }
     }
 
-    let txt = `𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}* ${(conn.user.jid == global.conn.user.jid ? '(𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥)' : '(𝐒𝐮𝐛-𝐁𝐨𝐭 🅑)')}
+    let rolBot = conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Sub-Bot 🅑'
 
-> ꕥ *_Hora:_* ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
-> ꕤ *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
-> ꕥ *_Actividad:_* ${uptimeStr}
+    let txt = `
+   𝗛𝗼𝗹𝗮! 𝗦𝗼𝘆 *${botNameToShow}* (${rolBot})
+
+ꕥ *Información* ꕥ
+> *Hora:* ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
+> *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
+> *Actividad:* ${uptimeStr}
+
 
 ✿ 𝗖𝗮𝗻𝗮𝗹: https://whatsapp.com/channel/0029VbArz9fAO7RGy2915k3O
 
-Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
+╭─❒ ☆.｡.:* *𝐌𝐄𝐍𝐔* ☆.｡.:* ❒─╮\n\n`
 
     for (let tag in menu) {
-      txt += `*»  ⊹ ˚୨ ${tag.toUpperCase()} ୧˚⊹*\n`
+      txt += `╭─⊹˚୨ ${tag.toUpperCase()} ୧˚⊹─╮\n`
       for (let plugin of menu[tag]) {
         for (let cmd of plugin.help) {
-          txt += `> ✐ ${usedPrefix + cmd}\n`
+          txt += `│ ✐ ${usedPrefix + cmd}\n`
         }
       }
-      txt += `\n`
+      txt += `╰───────────────╯\n\n`
     }
 
     if (videoUrl) {
