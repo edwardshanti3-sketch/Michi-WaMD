@@ -24,14 +24,23 @@ let handler = async (m, { conn, usedPrefix }) => {
     let bannerUrl = global.michipg || ""
     let videoUrl = null
 
+    // 📌 detectar si es subbot o principal
     const senderBotNumber = conn.user.jid.split('@')[0]
-    const configPath = path.join('./Sessions/SubBot', senderBotNumber, 'config.json')
+    let configPath
+    if (conn.user.jid === global.conn.user.jid) {
+      // principal
+      configPath = path.join("./Sessions", "config.json")
+    } else {
+      // subbot
+      configPath = path.join("./Sessions/SubBot", senderBotNumber, "config.json")
+    }
+
     if (fs.existsSync(configPath)) {
       try {
-        const subBotConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
-        if (subBotConfig.name) botNameToShow = subBotConfig.name
-        if (subBotConfig.banner) bannerUrl = subBotConfig.banner
-        if (subBotConfig.video) videoUrl = subBotConfig.video
+        const botConfig = JSON.parse(fs.readFileSync(configPath, "utf-8"))
+        if (botConfig.name) botNameToShow = botConfig.name
+        if (botConfig.banner) bannerUrl = botConfig.banner
+        if (botConfig.video) videoUrl = botConfig.video
       } catch (e) { console.error(e) }
     }
 
@@ -91,5 +100,5 @@ Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
   }
 }
 
-handler.command = ['help', 'menu']
+handler.command = ['help', 'menu','m']
 export default handler
