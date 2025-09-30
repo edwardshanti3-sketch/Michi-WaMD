@@ -30,22 +30,28 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         }, { quoted: m })
 
         if (command === 'play' || command === 'ytmp3') {
-            let api2 = await (await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${url}`)).json()
-            if (!api2?.data?.url) return m.reply('> No se pudo descargar el audio.')
+            let res = await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${encodeURIComponent(url)}`)
+            let api2 = await res.json()
+
+            let audioUrl = api2?.data?.url || null
+            if (!audioUrl) return m.reply('> No se pudo descargar el audio.')
 
             await conn.sendMessage(m.chat, {
-                audio: { url: api2.data.url },
+                audio: { url: audioUrl },
                 mimetype: 'audio/mpeg',
                 fileName: `${results.title || 'audio'}.mp3`,
                 ptt: false
             }, { quoted: m })
 
         } else if (command === 'play2' || command === 'ytmp4') {
-            let api2 = await (await fetch(`https://api-adonix.ultraplus.click/download/ytmp4?apikey=Adofreekey&url=${url}`)).json()
-            if (!api2?.data?.url) return m.reply('> No se pudo descargar el video.')
+            let res = await fetch(`https://api-adonix.ultraplus.click/download/ytmp4?apikey=Adofreekey&url=${encodeURIComponent(url)}`)
+            let api2 = await res.json()
+
+            let videoUrl = api2?.data?.url || null
+            if (!videoUrl) return m.reply('> No se pudo descargar el video.')
 
             await conn.sendMessage(m.chat, {
-                video: { url: api2.data.url },
+                video: { url: videoUrl },
                 mimetype: 'video/mp4',
                 fileName: `${results.title || 'video'}.mp4`
             }, { quoted: m })
