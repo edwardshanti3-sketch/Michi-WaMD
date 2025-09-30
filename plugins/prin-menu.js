@@ -37,55 +37,42 @@ let handler = async (m, { conn, usedPrefix }) => {
 
     let rolBot = conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Sub-Bot 🅑'
 
-    let txt = `
-   𝗛𝗼𝗹𝗮! 𝗦𝗼𝘆 *${botNameToShow}* (${rolBot})
+    
+    let txt = `「⊹」𝗛𝗼𝗹𝗮! 𝗦𝗼𝘆 *${botNameToShow}* (${rolBot})
 
-ꕥ *Información* ꕥ
-> *Hora:* ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
-> *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
-> *Actividad:* ${uptimeStr}
+> ✐ Hora: ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
+> ꕤ Fecha: ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
+> ❏ Actividad: ${uptimeStr}
+> ✩ Canal: https://whatsapp.com/channel/0029VbArz9fAO7RGy2915k3O
 
-
-✿ 𝗖𝗮𝗻𝗮𝗹: https://whatsapp.com/channel/0029VbArz9fAO7RGy2915k3O
-
-╭─❒ ☆.｡.:* *𝐌𝐄𝐍𝐔* ☆.｡.:* ❒─╮\n\n`
+━━━━━━━━━━━━━━\n`
 
     for (let tag in menu) {
-      txt += `╭─⊹˚୨ ${tag.toUpperCase()} ୧˚⊹─╮\n`
+      txt += `「✎」*${tag.toUpperCase()}*\n\n`
       for (let plugin of menu[tag]) {
         for (let cmd of plugin.help) {
-          txt += `│ ✐ ${usedPrefix + cmd}\n`
+          txt += `> ❐ *${usedPrefix + cmd}*\n`
         }
       }
-      txt += `╰───────────────╯\n\n`
+      txt += `━━━━━━━━━━━━━━\n\n`
     }
 
     if (videoUrl) {
       await conn.sendMessage(
         m.chat,
-        {
-          video: { url: videoUrl },
-          caption: txt,
-          gifPlayback: false
-        },
+        { video: { url: videoUrl }, caption: txt, gifPlayback: false },
         { quoted: m }
       )
     } else if (bannerUrl) {
       await conn.sendMessage(
         m.chat,
-        {
-          image: { url: bannerUrl },
-          caption: txt
-        },
+        { image: { url: bannerUrl }, caption: txt },
         { quoted: m }
       )
     } else {
       await conn.sendMessage(
         m.chat,
-        {
-          image: { url: global.michipg },
-          caption: txt
-        },
+        { image: { url: global.michipg }, caption: txt },
         { quoted: m }
       )
     }
