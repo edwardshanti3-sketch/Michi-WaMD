@@ -23,18 +23,18 @@ global.prems = []
 
 global.libreria = "Baileys Multi Device"
 global.vs = "^1.3.2"
-global.nameqr = "Michi"
+global.nameqr = "Goku"
 global.sessions = "Sessions/Principal"
 global.jadi = "Sessions/SubBot"
 global.MichiJadibts = true
 global.enableRcanal = true
 
-global.botname = "𝖬𝗂𝖼𝗁𝗂 - 𝖡𝗈𝗍𝖶𝖺"
+global.botname = "Goku - 𝖡𝗈𝗍Saiyan"
 global.textbot = "ᴍɪᴄʜɪ ᴠ3, 𝗔𝗱𝗼"
-global.dev = "✎ ⍴᥆ᥕᥱrᥱძ ᑲᥡ 𝗔𝗱𝗼"
-global.author = "© mᥲძᥱ ᥕі𝗍һ 𝖠𝖽𝗈"
-global.etiqueta = "𝖠𝖽𝗈 | 𝟤𝟢𝟤𝟧 ©"
-global.currency = "¢ Pesos"
+global.dev = "✎ ⍴᥆ᥕᥱrᥱძ ᑲᥡ isagi"
+global.author = "© mᥲძᥱ ᥕі𝗍һ isagi"
+global.etiqueta = "isagi | 𝟤𝟢𝟤𝟧 ©"
+global.currency = "$ sagicoins"
 global.michipg = "https://files.catbox.moe/p2eq60.jpg"
 global.icono = "https://files.catbox.moe/dnjyto.jpg"
 global.catalogo = fs.readFileSync('./lib/catalogo.jpg')
