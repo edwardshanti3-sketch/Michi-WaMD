@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import yts from 'yt-search'
 
-// scraper
+// scraper adaptado
 async function ytdl(url) {
     try {
         const response = await fetch('https://ytdown.io/proxy.php', {
@@ -16,7 +16,7 @@ async function ytdl(url) {
 
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
         const data = await response.json()
-        return data.api
+        return data.api // <- array de objetos con mediaUrl, type, etc.
     } catch (error) {
         console.error('Error downloading video:', error)
         throw error
@@ -43,24 +43,44 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         if (!dl || !Array.isArray(dl)) return m.reply('No se pudo obtener la descarga.')
 
         if (command === 'play' || command === 'ytmp3') {
-            let audio = dl.find(v => v.type === 'audio' || v.quality?.includes('Audio'))
+            let audio = dl.find(v => v.type?.toLowerCase() === 'audio')
             if (!audio) return m.reply('No se encontró un enlace de audio.')
 
             await conn.sendMessage(m.chat, {
-                audio: { url: audio.url },
+                audio: { url: audio.mediaUrl },
                 mimetype: 'audio/mpeg',
-                fileName: `${results.title || 'audio'}.mp3`,
-                ptt: false
+                fileName: `${results.title || audio.name || 'audio'}.${(audio.mediaExtension || 'mp3').toLowerCase()}`,
+                ptt: false,
+                contextInfo: {
+                    externalAdReply: {
+                        title: results.title || audio.name,
+                        body: `Calidad: ${audio.mediaQuality || 'desconocida'} | Duración: ${audio.mediaDuration || ''}`,
+                        thumbnailUrl: audio.mediaThumbnail,
+                        sourceUrl: url,
+                        mediaType: 1,
+                        renderLargerThumbnail: true
+                    }
+                }
             }, { quoted: m })
 
         } else if (command === 'play2' || command === 'ytmp4') {
-            let video = dl.find(v => v.type === 'video' || v.quality?.includes('360p') || v.quality?.includes('720p'))
+            let video = dl.find(v => v.type?.toLowerCase() === 'video')
             if (!video) return m.reply('No se encontró un enlace de video.')
 
             await conn.sendMessage(m.chat, {
-                video: { url: video.url },
+                video: { url: video.mediaUrl },
                 mimetype: 'video/mp4',
-                fileName: `${results.title || 'video'}.mp4`
+                fileName: `${results.title || video.name || 'video'}.${(video.mediaExtension || 'mp4').toLowerCase()}`,
+                contextInfo: {
+                    externalAdReply: {
+                        title: results.title || video.name,
+                        body: `Calidad: ${video.mediaQuality || ''} | Duración: ${video.mediaDuration || ''}`,
+                        thumbnailUrl: video.mediaThumbnail,
+                        sourceUrl: url,
+                        mediaType: 1,
+                        renderLargerThumbnail: true
+                    }
+                }
             }, { quoted: m })
         }
 
