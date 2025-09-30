@@ -29,10 +29,16 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             caption: infoTxt
         }, { quoted: m })
 
-        if (command === 'play' || command === 'ytmp3') {
-            let res = await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${encodeURIComponent(url)}`)
-            let api2 = await res.json()
+        const fetchOptions = {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                'Accept': 'application/json, text/plain, */*'
+            }
+        }
 
+        if (command === 'play' || command === 'ytmp3') {
+            let res = await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${encodeURIComponent(url)}`, fetchOptions)
+            let api2 = await res.json()
             let audioUrl = api2?.data?.url || null
             if (!audioUrl) return m.reply('> No se pudo descargar el audio.')
 
@@ -44,9 +50,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             }, { quoted: m })
 
         } else if (command === 'play2' || command === 'ytmp4') {
-            let res = await fetch(`https://api-adonix.ultraplus.click/download/ytmp4?apikey=Adofreekey&url=${encodeURIComponent(url)}`)
+            let res = await fetch(`https://api-adonix.ultraplus.click/download/ytmp4?apikey=Adofreekey&url=${encodeURIComponent(url)}`, fetchOptions)
             let api2 = await res.json()
-
             let videoUrl = api2?.data?.url || null
             if (!videoUrl) return m.reply('> No se pudo descargar el video.')
 
