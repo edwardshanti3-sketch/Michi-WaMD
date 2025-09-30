@@ -40,9 +40,9 @@ global.icono = "https://files.catbox.moe/dnjyto.jpg"
 global.catalogo = fs.readFileSync('./lib/catalogo.jpg')
 
 
-global.group = "https://chat.whatsapp.com/D80dadzwRq4LQqFGUntZfK?mode=ems_copy_t"
+global.group = "https://chat.whatsapp.com/L9UyXG5Oh7UEP1wMF3UjHL?mode=ems_copy_c"
 global.community = ""
-global.channel = "https://whatsapp.com/channel/0029VbArz9fAO7RGy2915k3O"
+global.channel = "https://whatsapp.com/channel/0029Vb71nqg0AgW2Lehkye2p"
 global.github = "https://github.com"
 global.gmail = "minexdt@gmail.com"
 global.ch = {
