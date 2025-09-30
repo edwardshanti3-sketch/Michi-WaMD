@@ -1,28 +1,6 @@
 import fetch from 'node-fetch'
 import yts from 'yt-search'
 
-// scraper adaptado
-async function ytdl(url) {
-    try {
-        const response = await fetch('https://ytdown.io/proxy.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'Accept': '*/*',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: `url=${encodeURIComponent(url)}`
-        })
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-        const data = await response.json()
-        return data.api // <- array de objetos con mediaUrl, type, etc.
-    } catch (error) {
-        console.error('Error downloading video:', error)
-        throw error
-    }
-}
-
 let handler = async (m, { conn, usedPrefix, command, text }) => {
     if (!text) return m.reply(`» Ingresa un texto o link de YouTube\n> Ejemplo: ${usedPrefix + command} ozuna`)
 
@@ -31,56 +9,35 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         let results
 
         if (!url) {
+            
             let search = await yts(text)
             if (!search?.all || search.all.length === 0) return m.reply('No se encontraron resultados.')
             results = search.all[0]
             url = results.url
         } else {
+        
             results = { title: 'Audio/Video', url }
         }
 
-        let dl = await ytdl(url)
-        if (!dl || !Array.isArray(dl)) return m.reply('No se pudo obtener la descarga.')
-
         if (command === 'play' || command === 'ytmp3') {
-            let audio = dl.find(v => v.type?.toLowerCase() === 'audio')
-            if (!audio) return m.reply('No se encontró un enlace de audio.')
+            let api2 = await (await fetch(`https://api-adonix.ultraplus.click/download/ytmp3?apikey=Adofreekey&url=${url}`)).json()
+            if (!api2?.data?.url) return m.reply('> No se pudo descargar el audio.')
 
             await conn.sendMessage(m.chat, {
-                audio: { url: audio.mediaUrl },
+                audio: { url: api2.data.url },
                 mimetype: 'audio/mpeg',
-                fileName: `${results.title || audio.name || 'audio'}.${(audio.mediaExtension || 'mp3').toLowerCase()}`,
-                ptt: false,
-                contextInfo: {
-                    externalAdReply: {
-                        title: results.title || audio.name,
-                        body: `Calidad: ${audio.mediaQuality || 'desconocida'} | Duración: ${audio.mediaDuration || ''}`,
-                        thumbnailUrl: audio.mediaThumbnail,
-                        sourceUrl: url,
-                        mediaType: 1,
-                        renderLargerThumbnail: true
-                    }
-                }
+                fileName: `${results.title || 'audio'}.mp3`,
+                ptt: false
             }, { quoted: m })
 
         } else if (command === 'play2' || command === 'ytmp4') {
-            let video = dl.find(v => v.type?.toLowerCase() === 'video')
-            if (!video) return m.reply('No se encontró un enlace de video.')
+            let api2 = await (await fetch(`https://api-adonix.ultraplus.click/download/ytmp4?apikey=Adofreekey&url=${url}`)).json()
+            if (!api2?.data?.url) return m.reply('> No se pudo descargar el video.')
 
             await conn.sendMessage(m.chat, {
-                video: { url: video.mediaUrl },
+                video: { url: api2.data.url },
                 mimetype: 'video/mp4',
-                fileName: `${results.title || video.name || 'video'}.${(video.mediaExtension || 'mp4').toLowerCase()}`,
-                contextInfo: {
-                    externalAdReply: {
-                        title: results.title || video.name,
-                        body: `Calidad: ${video.mediaQuality || ''} | Duración: ${video.mediaDuration || ''}`,
-                        thumbnailUrl: video.mediaThumbnail,
-                        sourceUrl: url,
-                        mediaType: 1,
-                        renderLargerThumbnail: true
-                    }
-                }
+                fileName: `${results.title || 'video'}.mp4`
             }, { quoted: m })
         }
 
