@@ -7,7 +7,7 @@ global.botNumber = ""
 
 global.owner = [
 // ZONA DE JIDS
-["50499605089", "Isagi </>", true],
+["50487773186", "Isagi </>", true],
 ["51956931649"],
 [""],  
 // ZONA DE LIDS
@@ -16,7 +16,7 @@ global.owner = [
 ]
 
 global.mods = []
-global.suittag = ["50499605089"] 
+global.suittag = ["50487773186"] 
 global.prems = []
 
 
