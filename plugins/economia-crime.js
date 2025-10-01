@@ -5,7 +5,7 @@ return m.reply(`《✦》Los comandos de *Economía* están desactivados en este
 let user = global.db.data.users[m.sender]
 user.lastcrime = user.lastcrime || 0
 user.coin = user.coin || 0
-const cooldown = 1 * 60 * 100
+const cooldown = 1 * 60 * 3000
 const ahora = Date.now()
 if (ahora < user.lastcrime) {
 const restante = user.lastcrime - ahora
@@ -16,7 +16,7 @@ user.lastcrime = ahora + cooldown
 const evento = pickRandom(crimen)
 let cantidad
 if (evento.tipo === 'victoria') {
-cantidad = Math.floor(Math.random() * 100000000000000) + 100000000000000
+cantidad = Math.floor(Math.random() * 1501) + 6000
 user.coin += cantidad
 } else {
 cantidad = Math.floor(Math.random() * 1501) + 4000
