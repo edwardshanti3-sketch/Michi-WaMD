@@ -5,7 +5,7 @@ return m.reply(`《✦》Los comandos de *Economía* están desactivados en este
 let user = global.db.data.users[m.sender]
 user.lastcrime = user.lastcrime || 0
 user.coin = user.coin || 0
-const cooldown = 1 * 60 * 1000
+const cooldown = 1 * 60 * 160
 const ahora = Date.now()
 if (ahora < user.lastcrime) {
 const restante = user.lastcrime - ahora
