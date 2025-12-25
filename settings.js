@@ -34,8 +34,8 @@ global.dev = "✎ ⍴᥆ᥕᥱrᥱძ ᑲᥡ Dionebi-sama"
 global.author = "© mᥲძᥱ ᥕі𝗍һ Dionebi-sama"
 global.etiqueta = "dionebi-sama | 𝟤𝟢𝟤𝟧 ©"
 global.currency = "$ siyings"
-global.michipg = "https://files.catbox.moe/p2eq60.jpg"
-global.icono = "https://files.catbox.moe/dnjyto.jpg"
+global.michipg = "https://files.catbox.moe/tuz2gl.jpg"
+global.icono = "https://files.catbox.moe/tuz2gl.jpg"
 global.catalogo = fs.readFileSync('./lib/catalogo.jpg')
 
 
