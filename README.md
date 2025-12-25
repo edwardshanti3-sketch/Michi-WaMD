@@ -36,4 +36,3 @@ Tu apoyo ayuda a que Si Ying siga creciendo 🚀
 Bot: Si Ying  
 System: Future-Bot ⚡  
 Dev: Dionebi-sama | 開発者
-─────────────────
