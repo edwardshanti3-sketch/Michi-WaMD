@@ -22,15 +22,22 @@ let handler = async (m, { conn, usedPrefix }) => {
     let totalUsers = users.length
     /* ─────────────────────────────── */
 
+    /* ───── 📜 MENÚ (SIN MAIN) ───── */
     let menu = {}
     for (let plugin of Object.values(global.plugins)) {
       if (!plugin || !plugin.help) continue
       let taglist = plugin.tags || []
+
       for (let tag of taglist) {
+        // ❌ eliminar "main"
+        if (tag.toLowerCase() === 'main') continue
+
+        // ✅ dejar solo info y demás categorías útiles
         if (!menu[tag]) menu[tag] = []
         menu[tag].push(plugin)
       }
     }
+    /* ─────────────────────────────── */
 
     let uptimeSec = process.uptime()
     let hours = Math.floor(uptimeSec / 3600)
@@ -60,7 +67,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
 
     let txt = `
-╭─❖ 「 🤖 𝗠𝗘𝗡𝗨 𝗣𝗥𝗜𝗡𝗖𝗜𝗣𝗔𝗟 」 ❖─╮
+╭─❖ 「 🤖 𝗜𝗡𝗙𝗢 𝗗𝗘𝗟 𝗕𝗢𝗧 」 ❖─╮
 │
 │ 𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}*
 │ ${(conn.user.jid == global.conn.user.jid ? '𝐁𝐨𝐭 𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥' : '𝐒𝐮𝐛-𝐁𝐨𝐭 🅑')}
@@ -75,7 +82,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ✿ 𝗖𝗮𝗻𝗮𝗹:
 https://whatsapp.com/channel/0029Vb6ygDELo4hpelb24M01
 
-⟪ 📜 𝗟𝗜𝗦𝗧𝗔 𝗗𝗘 𝗖𝗢𝗠𝗔𝗡𝗗𝗢𝗦 ⟫
+⟪ 📜 𝗖𝗢𝗠𝗔𝗡𝗗𝗢𝗦 ⟫
 
 `
 
@@ -90,7 +97,7 @@ https://whatsapp.com/channel/0029Vb6ygDELo4hpelb24M01
     }
 
     // 🔹 FIRMA FUTURISTA (fuente chica)
-txt += `
+    txt += `
 ────────────────────
 ʙᴏᴛ: 𝗦𝗶 𝗬𝗶𝗻𝗴
 ᴅᴇᴠ: 👑 ᴅɪᴏɴᴇʙɪ-sᴀᴍᴀ | 開発者
@@ -101,19 +108,13 @@ sʏsᴛᴇᴍ: ғᴜᴛᴜʀᴇ-ʙᴏᴛ ⚡
     if (videoUrl) {
       await conn.sendMessage(
         m.chat,
-        { video: { url: videoUrl }, caption: txt, gifPlayback: false },
-        { quoted: m }
-      )
-    } else if (bannerUrl) {
-      await conn.sendMessage(
-        m.chat,
-        { image: { url: bannerUrl }, caption: txt },
+        { video: { url: videoUrl }, caption: txt },
         { quoted: m }
       )
     } else {
       await conn.sendMessage(
         m.chat,
-        { image: { url: global.michipg }, caption: txt },
+        { image: { url: bannerUrl }, caption: txt },
         { quoted: m }
       )
     }
