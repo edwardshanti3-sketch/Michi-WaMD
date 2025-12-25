@@ -70,7 +70,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 ╭─❖ 「 🤖 𝗜𝗡𝗙𝗢 𝗗𝗘𝗟 𝗕𝗢𝗧 」 ❖─╮
 │
 │ 𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}*
-│ ${(conn.user.jid == global.conn.user.jid ? '𝐁𝐨𝐭 𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥' : '𝐁𝐨𝐭')}
+│ ${(conn.user.jid == global.conn.user.jid ? '𝐁𝐨𝐭 𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥' : '𝐒𝐮𝐛-𝐁𝐨𝐭')}
 │
 │ ⏰ Hora: ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
 │ 📅 Fecha: ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
