@@ -1,23 +1,28 @@
 var handler = async (m, { conn, usedPrefix }) => {
-  let user =
-    m.mentionedJid?.[0] ||
-    (m.quoted ? m.quoted.sender : null)
+  // ✅ SOLO mención real
+  let user = m.mentionedJid?.[0]
 
   if (!user) {
     return conn.reply(
       m.chat,
-      '✎ Debes mencionar o responder a un usuario para promoverlo a administrador.',
+      '✎ Uso correcto:\n\n' +
+      '➤ .promote @usuario\n\n' +
+      '⚠️ Debes mencionar usando la lista de WhatsApp.\n' +
+      '❌ No responder mensajes\n' +
+      '❌ No usar reenviados o canales',
       m
     )
   }
 
   try {
     const groupInfo = await conn.groupMetadata(m.chat)
+
+    // 👑 Dueño del grupo
     const owner =
       groupInfo.owner ||
       m.chat.split('-')[0] + '@s.whatsapp.net'
 
-    // 🔒 Solo el creador puede usar el comando
+    // 🔒 Solo creador
     if (m.sender !== owner) {
       return conn.reply(
         m.chat,
@@ -31,20 +36,25 @@ var handler = async (m, { conn, usedPrefix }) => {
     )
 
     if (!participant) {
-      return conn.reply(m.chat, '⚠︎ El usuario no está en el grupo.', m)
+      return conn.reply(
+        m.chat,
+        '⚠︎ El usuario mencionado no pertenece a este grupo.',
+        m
+      )
     }
 
     if (participant.admin) {
       return conn.reply(
         m.chat,
-        '> El usuario mencionado ya es administrador.',
+        '> El usuario ya posee rango de administrador.',
         m
       )
     }
 
+    // 🚀 PROMOVER
     await conn.groupParticipantsUpdate(m.chat, [user], 'promote')
 
-    // 👑 Mensaje con etiqueta
+    // 👑 MENSAJE CON ETIQUETA
     await conn.sendMessage(
       m.chat,
       {
