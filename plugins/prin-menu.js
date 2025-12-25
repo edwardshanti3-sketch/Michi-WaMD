@@ -2,8 +2,26 @@ import moment from "moment-timezone"
 import fs from "fs"
 import path from "path"
 
+const USERS_DB = './database/users.json'
+
+// 📂 crear base de datos si no existe
+if (!fs.existsSync('./database')) fs.mkdirSync('./database')
+if (!fs.existsSync(USERS_DB)) fs.writeFileSync(USERS_DB, JSON.stringify([]))
+
 let handler = async (m, { conn, usedPrefix }) => {
   try {
+    /* ───── 👥 REGISTRO DE USUARIOS ───── */
+    let users = JSON.parse(fs.readFileSync(USERS_DB))
+    let sender = m.sender
+
+    if (!users.includes(sender)) {
+      users.push(sender)
+      fs.writeFileSync(USERS_DB, JSON.stringify(users, null, 2))
+    }
+
+    let totalUsers = users.length
+    /* ─────────────────────────────── */
+
     let menu = {}
     for (let plugin of Object.values(global.plugins)) {
       if (!plugin || !plugin.help) continue
@@ -24,14 +42,11 @@ let handler = async (m, { conn, usedPrefix }) => {
     let bannerUrl = global.michipg || ""
     let videoUrl = null
 
-    // 📌 detectar si es subbot o principal
     const senderBotNumber = conn.user.jid.split('@')[0]
     let configPath
     if (conn.user.jid === global.conn.user.jid) {
-      // principal
       configPath = path.join("./Sessions", "config.json")
     } else {
-      // subbot
       configPath = path.join("./Sessions/SubBot", senderBotNumber, "config.json")
     }
 
@@ -44,52 +59,61 @@ let handler = async (m, { conn, usedPrefix }) => {
       } catch (e) { console.error(e) }
     }
 
-    let txt = `𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}* ${(conn.user.jid == global.conn.user.jid ? '(𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥)' : '(𝐒𝐮𝐛-𝐁𝐨𝐭 🅑)')}
+    let txt = `
+╭─❖ 「 🤖 𝗠𝗘𝗡𝗨 𝗣𝗥𝗜𝗡𝗖𝗜𝗣𝗔𝗟 」 ❖─╮
+│
+│ 𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}*
+│ ${(conn.user.jid == global.conn.user.jid ? '𝐁𝐨𝐭 𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥' : '𝐒𝐮𝐛-𝐁𝐨𝐭 🅑')}
+│
+│ ⏰ Hora: ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
+│ 📅 Fecha: ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
+│ ⚡ Activo: ${uptimeStr}
+│ 👥 Usuarios registrados: ${totalUsers}
+│
+╰────────────────────────╯
 
-> ꕥ *_Hora:_* ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
-> ꕤ *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
-> ꕥ *_Actividad:_* ${uptimeStr}
+✿ 𝗖𝗮𝗻𝗮𝗹:
+https://whatsapp.com/channel/0029Vb6ygDELo4hpelb24M01
 
-✿ 𝗖𝗮𝗻𝗮𝗹: https://whatsapp.com/channel/0029Vb6ygDELo4hpelb24M01
+⟪ 📜 𝗟𝗜𝗦𝗧𝗔 𝗗𝗘 𝗖𝗢𝗠𝗔𝗡𝗗𝗢𝗦 ⟫
 
-Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
+`
 
     for (let tag in menu) {
-      txt += `*»  ⊹ ˚୨ ${tag.toUpperCase()} ୧˚⊹*\n`
+      txt += `╭─⊹ ${tag.toUpperCase()} ⊹─╮\n`
       for (let plugin of menu[tag]) {
         for (let cmd of plugin.help) {
-          txt += `> ✐ ${usedPrefix + cmd}\n`
+          txt += `│ ✧ ${usedPrefix + cmd}\n`
         }
       }
-      txt += `\n`
+      txt += `╰──────────────╯\n\n`
     }
+
+    // 🔹 FIRMA FUTURISTA (fuente chica)
+    txt += `
+────────────────────
+ᴀᴜᴛʜᴏʀ: 𝘀𝗶 𝘆𝗶𝗻𝗴
+ᴅᴇᴠ: 👑 ᴅɪᴏɴᴇʙɪ-sᴀᴍᴀ | 開発者
+ᴍᴏᴅᴇ: ғᴜᴛᴜʀᴇ-ʙᴏᴛ ⚡
+────────────────────
+`
 
     if (videoUrl) {
       await conn.sendMessage(
         m.chat,
-        {
-          video: { url: videoUrl },
-          caption: txt,
-          gifPlayback: false
-        },
+        { video: { url: videoUrl }, caption: txt, gifPlayback: false },
         { quoted: m }
       )
     } else if (bannerUrl) {
       await conn.sendMessage(
         m.chat,
-        {
-          image: { url: bannerUrl },
-          caption: txt
-        },
+        { image: { url: bannerUrl }, caption: txt },
         { quoted: m }
       )
     } else {
       await conn.sendMessage(
         m.chat,
-        {
-          image: { url: global.michipg },
-          caption: txt
-        },
+        { image: { url: global.michipg }, caption: txt },
         { quoted: m }
       )
     }
@@ -100,5 +124,5 @@ Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
   }
 }
 
-handler.command = ['help', 'menu','m']
+handler.command = ['help', 'menu', 'm']
 export default handler
