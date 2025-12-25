@@ -44,7 +44,7 @@ let handler = async (m, { conn, usedPrefix }) => {
       } catch (e) { console.error(e) }
     }
 
-    let txt = `𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 𝐥𝐚 𝐛𝐨𝐭*${botNameToShow}* ${(conn.user.jid == global.conn.user.jid ? '(𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥)' : '(𝐒𝐮𝐛-𝐁𝐨𝐭 🅑)')}
+    let txt = `𝐇𝐨𝐥𝐚! 𝐒𝐨𝐲 *${botNameToShow}* ${(conn.user.jid == global.conn.user.jid ? '(𝐏𝐫𝐢𝐧𝐜𝐢𝐩𝐚𝐥 🅥)' : '(𝐒𝐮𝐛-𝐁𝐨𝐭 🅑)')}
 
 > ꕥ *_Hora:_* ${moment.tz("America/Tegucigalpa").format("HH:mm:ss")}
 > ꕤ *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
