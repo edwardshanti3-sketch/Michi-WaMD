@@ -7,8 +7,8 @@ global.botNumber = ""
 
 global.owner = [
 // ZONA DE JIDS
-["50487773186", "Isagi </>", true],
-["50487773186"],
+["50432788804", "Dionebi-sama </>", true],
+["50432788804"],
 [""],  
 // ZONA DE LIDS
 ["", "", true], 
@@ -16,7 +16,7 @@ global.owner = [
 ]
 
 global.mods = []
-global.suittag = ["50487773186"] 
+global.suittag = ["50432788804"] 
 global.prems = []
 
 
@@ -39,9 +39,9 @@ global.icono = "https://files.catbox.moe/dnjyto.jpg"
 global.catalogo = fs.readFileSync('./lib/catalogo.jpg')
 
 
-global.group = "https://chat.whatsapp.com/L9UyXG5Oh7UEP1wMF3UjHL?mode=ems_copy_c"
-global.community = ""
-global.channel = "https://whatsapp.com/channel/0029Vb71nqg0AgW2Lehkye2p"
+global.group = "https://chat.whatsapp.com/LTdquaIwk9sEz66D1u0kNh"
+global.community = "https://chat.whatsapp.com/HbnT0v3LLpwEX4LH0yis3j"
+global.channel = "https://whatsapp.com/channel/0029Vb6ygDELo4hpelb24M01"
 global.github = "https://github.com"
 global.gmail = "minexdt@gmail.com"
 global.ch = {
