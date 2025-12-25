@@ -1,10 +1,10 @@
-var handler = async (m, { conn, text, usedPrefix }) => {
+var handler = async (m, { conn, usedPrefix }) => {
 
-  // 👑 Número autorizado (Honduras)
-  const OWNER_NUMBER = '32788804@s.whatsapp.net'
+  // 👑 OWNER FIJO (TU NÚMERO)
+  const OWNER = '50432788804@s.whatsapp.net'
 
-  // 🔒 Solo ese número puede usar el comando
-  if (m.sender !== OWNER_NUMBER) {
+  // 🔒 SOLO TÚ PUEDES USARLO
+  if (m.sender !== OWNER) {
     return conn.reply(
       m.chat,
       '⛔ No tienes permiso para usar este comando.',
@@ -12,19 +12,18 @@ var handler = async (m, { conn, text, usedPrefix }) => {
     )
   }
 
-  if (!text) {
+  // ✅ SOLO MENCIÓN REAL
+  let user = m.mentionedJid?.[0]
+
+  if (!user) {
     return conn.reply(
       m.chat,
-      `✎ Uso correcto:\n\n` +
-      `${usedPrefix}promote 32788804\n\n` +
-      `⚠️ Escribe solo el número, sin + ni espacios.`,
+      '✎ Uso correcto:\n\n' +
+      '➤ .promote @usuario\n\n' +
+      '⚠️ Usa la mención real de WhatsApp.',
       m
     )
   }
-
-  // 📞 Limpiar número
-  let number = text.replace(/[^0-9]/g, '')
-  let user = number + '@s.whatsapp.net'
 
   try {
     const groupInfo = await conn.groupMetadata(m.chat)
@@ -36,7 +35,7 @@ var handler = async (m, { conn, text, usedPrefix }) => {
     if (!participant) {
       return conn.reply(
         m.chat,
-        '⚠︎ El número no está en este grupo.',
+        '⚠︎ El usuario no está en el grupo.',
         m
       )
     }
@@ -44,22 +43,20 @@ var handler = async (m, { conn, text, usedPrefix }) => {
     if (participant.admin) {
       return conn.reply(
         m.chat,
-        '> Este usuario ya es administrador.',
+        '> El usuario ya es administrador.',
         m
       )
     }
 
-    // 🚀 PROMOVER
     await conn.groupParticipantsUpdate(m.chat, [user], 'promote')
 
-    // 👑 Mensaje final
     await conn.sendMessage(
       m.chat,
       {
         text:
           `ꕥ 𝗗𝗶𝗼𝗻𝗲𝗯𝗶-𝘀𝗮𝗺𝗮 𝗵𝗮 𝗼𝘁𝗼𝗿𝗴𝗮𝗱𝗼 𝗔𝗗𝗠𝗜𝗡 👑\n\n` +
-          `✦ Número: +${number}\n` +
-          `✦ Etiqueta: 👑『 開発者 | DEV 』\n\n` +
+          `✦ Etiqueta: 👑『 開発者 | DEV 』\n` +
+          `✦ Usuario: @${user.split('@')[0]}\n\n` +
           `Usa tu poder con honor ⚔️`,
         mentions: [user]
       },
@@ -69,13 +66,13 @@ var handler = async (m, { conn, text, usedPrefix }) => {
   } catch (e) {
     conn.reply(
       m.chat,
-      `⚠︎ Error inesperado.\n> Usa *${usedPrefix}report* para reportarlo.`,
+      `⚠︎ Error interno.\n> Usa *${usedPrefix}report* si persiste.`,
       m
     )
   }
 }
 
-handler.help = ['promote <numero>']
+handler.help = ['promote']
 handler.tags = ['grupo']
 handler.command = ['promote', 'promover']
 handler.group = true
