@@ -1,5 +1,3 @@
-import { promises as fs } from 'fs';
-
 const handler = async (m, { conn, text, command, usedPrefix }) => {
 // if (m.mentionedJid.includes(conn.user.jid)) return; // Evitar advertir al bot mismo
 const pp = './src/catalogo.jpg'
