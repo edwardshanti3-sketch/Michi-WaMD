@@ -3,7 +3,7 @@ var handler = async (m, { conn, usedPrefix, isAdmin }) => {
   if (!isAdmin) {
     return conn.reply(
       m.chat,
-      '⛔ Solo los *administradores* pueden usar este comando.',
+      '⛔ Solo los administradores pueden usar este comando.',
       m
     )
   }
@@ -33,7 +33,6 @@ var handler = async (m, { conn, usedPrefix, isAdmin }) => {
       )
     }
 
-    // ❌ Si ya es admin
     if (participant.admin) {
       return conn.reply(
         m.chat,
@@ -42,19 +41,21 @@ var handler = async (m, { conn, usedPrefix, isAdmin }) => {
       )
     }
 
-    // 🚀 Promover
+    // 🚀 PROMOVER
     await conn.groupParticipantsUpdate(m.chat, [user], 'promote')
 
-    // 👑 MENSAJE indicando QUIÉN dio el admin
+    // 📛 Nombre del que ejecutó el comando
+    let authorName = await conn.getName(m.sender)
+
+    // 👑 MENSAJE FINAL
     await conn.sendMessage(
       m.chat,
       {
         text:
-          `👑 *Nuevo administrador*\n\n` +
-          `➤ Usuario: @${user.split('@')[0]}\n` +
-          `➤ Acción hecha por: @${m.sender.split('@')[0]}\n\n` +
-          `Usa tu poder con responsabilidad ⚔️`,
-        mentions: [user, m.sender]
+          `ꕥ 𝗠𝗶 𝗮𝗺𝗼 𝗗𝗶𝗼𝗻𝗲𝗯𝗶-𝘀𝗮𝗺𝗮 𝗵𝗮 𝗱𝗲𝗰𝗶𝗱𝗶𝗱𝗼 𝗱𝗮𝗿𝘁𝗲 𝗮𝗱𝗺𝗶𝗻 👑\n\n` +
+          `✦ Usuario: @${user.split('@')[0]}\n` +
+          `✦ Acción realizada por: ${authorName}`,
+        mentions: [user]
       },
       { quoted: m }
     )
