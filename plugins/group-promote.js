@@ -1,26 +1,24 @@
-var handler = async (m, { conn, usedPrefix }) => {
-
-  // 👑 OWNER FIJO (TU NÚMERO)
-  const OWNER = '50432788804@s.whatsapp.net'
-
-  // 🔒 SOLO TÚ PUEDES USARLO
-  if (m.sender !== OWNER) {
+var handler = async (m, { conn, usedPrefix, isAdmin }) => {
+  // 🔒 Solo admins pueden usar el comando
+  if (!isAdmin) {
     return conn.reply(
       m.chat,
-      '⛔ No tienes permiso para usar este comando.',
+      '⛔ Solo los *administradores* pueden usar este comando.',
       m
     )
   }
 
-  // ✅ SOLO MENCIÓN REAL
-  let user = m.mentionedJid?.[0]
+  let mentionedJid = m.mentionedJid
+  let user = mentionedJid && mentionedJid.length
+    ? mentionedJid[0]
+    : m.quoted
+    ? m.quoted.sender
+    : null
 
   if (!user) {
     return conn.reply(
       m.chat,
-      '✎ Uso correcto:\n\n' +
-      '➤ .promote @usuario\n\n' +
-      '⚠️ Usa la mención real de WhatsApp.',
+      '✎ Debes mencionar a un usuario o responder a su mensaje para promoverlo a administrador.',
       m
     )
   }
@@ -28,45 +26,30 @@ var handler = async (m, { conn, usedPrefix }) => {
   try {
     const groupInfo = await conn.groupMetadata(m.chat)
 
-    const participant = groupInfo.participants.find(
-      p => p.id === user
-    )
-
-    if (!participant) {
+    // ❌ Si ya es admin
+    if (groupInfo.participants.some(p => p.id === user && p.admin)) {
       return conn.reply(
         m.chat,
-        '⚠︎ El usuario no está en el grupo.',
+        '> El usuario mencionado ya tiene privilegios de administrador.',
         m
       )
     }
 
-    if (participant.admin) {
-      return conn.reply(
-        m.chat,
-        '> El usuario ya es administrador.',
-        m
-      )
-    }
-
+    // 🚀 Promover
     await conn.groupParticipantsUpdate(m.chat, [user], 'promote')
 
-    await conn.sendMessage(
+    // 👑 Mensaje Dionebi-sama
+    await conn.reply(
       m.chat,
-      {
-        text:
-          `ꕥ 𝗗𝗶𝗼𝗻𝗲𝗯𝗶-𝘀𝗮𝗺𝗮 𝗵𝗮 𝗼𝘁𝗼𝗿𝗴𝗮𝗱𝗼 𝗔𝗗𝗠𝗜𝗡 👑\n\n` +
-          `✦ Etiqueta: 👑『 開発者 | DEV 』\n` +
-          `✦ Usuario: @${user.split('@')[0]}\n\n` +
-          `Usa tu poder con honor ⚔️`,
-        mentions: [user]
-      },
-      { quoted: m }
+      'ꕥ 𝗠𝗶 𝗮𝗺𝗼 𝗗𝗶𝗼𝗻𝗲𝗯𝗶-𝘀𝗮𝗺𝗮 𝗵𝗮 𝗱𝗲𝗰𝗶𝗱𝗶𝗱𝗼 𝗱𝗮𝗿𝘁𝗲 𝗮𝗱𝗺𝗶𝗻 👑',
+      m,
+      { mentions: [user] }
     )
 
   } catch (e) {
     conn.reply(
       m.chat,
-      `⚠︎ Error interno.\n> Usa *${usedPrefix}report* si persiste.`,
+      `⚠︎ Se ha producido un problema.\n> Usa *${usedPrefix}report* para informarlo.`,
       m
     )
   }
@@ -76,6 +59,7 @@ handler.help = ['promote']
 handler.tags = ['grupo']
 handler.command = ['promote', 'promover']
 handler.group = true
+handler.admin = true
 handler.botAdmin = true
 
 export default handler
