@@ -50,7 +50,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 > ꕤ *Fecha:* ${moment.tz("America/Tegucigalpa").format("DD/MM/YYYY")}
 > ꕥ *_Actividad:_* ${uptimeStr}
 
-✿ 𝗖𝗮𝗻𝗮𝗹: https://whatsapp.com/channel/0029Vb71nqg0AgW2Lehkye2p
+✿ 𝗖𝗮𝗻𝗮𝗹: https://whatsapp.com/channel/0029Vb6ygDELo4hpelb24M01
 
 Aǫᴜɪ ᴛɪᴇɴᴇs ʟᴀ ʟɪsᴛᴀ ᴅᴇ ᴄᴏᴍᴀɴᴅᴏs:\n\n`
 
